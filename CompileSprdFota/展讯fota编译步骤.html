@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>展讯fota编译步骤</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+/* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
+/* Author: Nicolas Hery - http://nicolashery.com */
+/* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
+/* Source: https://github.com/nicolahery/markdownpad-github */
+
+/* RESET
+=============================================================================*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* BODY
+=============================================================================*/
+
+body {
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+body>*:first-child {
+  margin-top: 0 !important;
+}
+
+body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* BLOCKS
+=============================================================================*/
+
+p, blockquote, ul, ol, dl, table, pre {
+  margin: 15px 0;
+}
+
+/* HEADERS
+=============================================================================*/
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 tt, h1 code, h2 tt, h2 code, h3 tt, h3 code, h4 tt, h4 code, h5 tt, h5 code, h6 tt, h6 code {
+  font-size: inherit;
+}
+
+h1 {
+  font-size: 28px;
+  color: #000;
+}
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #ccc;
+  color: #000;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  color: #777;
+  font-size: 14px;
+}
+
+body>h2:first-child, body>h1:first-child, body>h1:first-child+h2, body>h3:first-child, body>h4:first-child, body>h5:first-child, body>h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
+  margin-top: 10px;
+}
+
+/* LINKS
+=============================================================================*/
+
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* LISTS
+=============================================================================*/
+
+ul, ol {
+  padding-left: 30px;
+}
+
+ul li > :first-child, 
+ol li > :first-child, 
+ul li ul:first-of-type, 
+ol li ol:first-of-type, 
+ul li ol:first-of-type, 
+ol li ul:first-of-type {
+  margin-top: 0px;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+  margin-bottom: 0;
+}
+
+dl {
+  padding: 0;
+}
+
+dl dt {
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0;
+  margin: 15px 0 5px;
+}
+
+dl dt:first-child {
+  padding: 0;
+}
+
+dl dt>:first-child {
+  margin-top: 0px;
+}
+
+dl dt>:last-child {
+  margin-bottom: 0px;
+}
+
+dl dd {
+  margin: 0 0 15px;
+  padding: 0 15px;
+}
+
+dl dd>:first-child {
+  margin-top: 0px;
+}
+
+dl dd>:last-child {
+  margin-bottom: 0px;
+}
+
+/* CODE
+=============================================================================*/
+
+pre, code, tt {
+  font-size: 12px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+
+code, tt {
+  margin: 0 0px;
+  padding: 0px 0px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+kbd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #DDDDDD;
+    background-image: linear-gradient(#F1F1F1, #DDDDDD);
+    background-repeat: repeat-x;
+    border-color: #DDDDDD #CCCCCC #CCCCCC #DDDDDD;
+    border-image: none;
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 10px;
+    padding: 1px 4px;
+}
+
+/* QUOTES
+=============================================================================*/
+
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #777;
+}
+
+blockquote>:first-child {
+  margin-top: 0px;
+}
+
+blockquote>:last-child {
+  margin-bottom: 0px;
+}
+
+/* HORIZONTAL RULES
+=============================================================================*/
+
+hr {
+  clear: both;
+  margin: 15px 0;
+  height: 0px;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  border-bottom: 4px solid #ddd;
+  padding: 0;
+}
+
+/* TABLES
+=============================================================================*/
+
+table th {
+  font-weight: bold;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 6px 13px;
+}
+
+table tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+/* IMAGES
+=============================================================================*/
+
+img {
+  max-width: 100%
+}
+</style>
+</head>
+<body>
+<h1>展讯fota编译步骤</h1>
+<hr />
+<h2>1.前奏</h2>
+<p>步骤：</p>
+<p>编译软件，编译ota，打包</p>
+<p>编译软件：</p>
+<p>1.下载软件</p>
+<p>2.设置编译环境 <code>source build/envsetup.sh</code> <code>lunch</code> <code>kheader</code></p>
+<p>3.通过make命令全编整个工程, <code>make -j16 2&gt;&amp;1 | tee buildlog.log</code></p>
+<h2>2.编译整包</h2>
+<p>4.进入<code>device/sprd/XXX/</code>目录，<strong>手动建立</strong><code>modem_bins</code>子目录</p>
+<p>5.然后将idh.code目录下的<code>modem_bin</code>中的文件按照<code>device/sprd/spXXX/AndroidBoard.mk</code>中的规定更改名字后拷贝到 <code>device/sprd/XXX/modem_bins/</code>目录下</p>
+<p>以9832A平台为例：</p>
+<pre><code>idh.code\device\sprd\scx35l\sp9832a_2h11\AndroidBoard.mk
+
+$(call add-radio-file,modem_bins/wcnmodem.bin)
+$(call add-radio-file,modem_bins/wcnfdl.bin)
+$(call add-radio-file,modem_bins/ltedsp.bin)
+$(call add-radio-file,modem_bins/ltenvitem.bin)
+$(call add-radio-file,modem_bins/pmsys.bin)
+$(call add-radio-file,modem_bins/ltemodem.bin)
+$(call add-radio-file,modem_bins/ltewarm.bin)
+$(call add-radio-file,modem_bins/ltegdsp.bin)
+</code></pre>
+
+<p>6.通过命令 <code>make otapackage</code> 编译ota整包，此命令运行完毕后会在out目录下生成ota整包</p>
+<p>以9832A平台为例：</p>
+<pre><code>B9401-fota-Package.zip
+sp9832a_2h11_4mvoltesea_tee-ota-eng.licf.zip
+</code></pre>
+
+<h2>3.编译sd卡包</h2>
+<p>1.下载A版本代码，按照整包制作步骤执行，保存此版本的A-target.zip</p>
+<p>2.下载B版本代码，按照整包制作步骤执行，保存此版本的B-target.zip</p>
+<p>3.制作差分升级包，执行以下命令，由于user版本和userdebug版本使用的签名的key不同，因此命令也不同，而最终-k后面参数为实际版本的key的放置目录。</p>
+<p>编译命令：</p>
+<p>userdebug版本:</p>
+<pre><code>./build/tools/releasetools/ota_from_target_files -i A-target.zip -k build/target/product/security/testkey B-target.zip A-B_update.zip
+</code></pre>
+
+<p>user版本:</p>
+<pre><code>./build/tools/releasetools/ota_from_target_files -i version/V10/ota_target_files.zip -k build/target/product/security/release/releasekey version/V11/ota_target_files.zip AA550_01C_BITEL_B9401_V11_FOTA_UPDATE.zip
+
+cp AA550_01C_BITEL_B9401_V11_FOTA_UPDATE.zip out/host/linux-x86/framework/
+
+java -Xmx2048m -Djava.library.path=out/host/linux-x86/lib64 -jar out/host/linux-x86/framework/signapk.jar -w build/target/product/security/release/releasekey.x509.pem build/target/product/security/release/releasekey.pk8 out/host/linux-x86/framework/AA550_01C_BITEL_B9401_V11_FOTA_UPDATE.zip AA550_01C_BITEL_B9401_V11_FOTA_UPDATE_AFTER_SIGN.zip
+
+md5sum ./AA550_01C_BITEL_B9401_V11_FOTA_UPDATE_AFTER_SIGN.zip | awk '{print $1}' &gt;./md5sum
+
+zip -r ./update_package.zip ./AA550_01C_BITEL_B9401_V11_FOTA_UPDATE_AFTER_SIGN.zip ./md5sum
+</code></pre>
+
+<h2>4.签名</h2>
+<pre><code>java -Xmx2048m -Djava.library.path=out/host/linux-x86/lib64 -jar out/host/linux-x86/framework/signapk.jar -w build/target/product/security/release/releasekey.x509.pem build/target/product/security/release/releasekey.pk8 out/host/linux-x86/framework/A-B_update_package.zip A-B_update_package_after_sign.zip
+</code></pre>
+
+<h2>5.modem_bins 改名规则</h2>
+<p>当前用的<code>modem</code>在里配置<code>idh.code\device\sprd\scx35l\sp9832a_2h11\sp9832a_2h11_4mvoltesea_tee.mk</code></p>
+<pre><code>CUSTOM_MODEM := BAND_8_CP0_W17.15.4_CP2_W17.10.2
+</code></pre>
+
+<p>以<code>9832A</code>的<code>BAND_8_CP0_W17.15.4_CP2_W17.10.2</code> modem为例</p>
+<p>命名映射规则：</p>
+<pre><code>EXEC_KERNEL_IMAGE0.bin -&gt; wcnmodem.bin
+fdl1_wcn.bin -&gt; wcnfdl.bin
+LTE_DSP.bin -&gt; ltedsp.bin
+nvitem.bin -&gt; ltenvitem.bin
+PM_sharkls_arm7.bin -&gt; pmsys.bin
+SC9600_sharkl_wphy_5mod_volte_zc.bin -&gt; ltewarm.bin
+SC9600_sharkls_3593_CUST_Base_NV_MIPI.dat -&gt; ltemodem.bin
+SHARKL_DM_DSP.bin -&gt; ltegdsp.bin
+</code></pre>
+
+
+</body>
+</html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->
