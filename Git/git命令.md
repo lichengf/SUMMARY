@@ -10,7 +10,7 @@
 
 一种是revert，一种是git push -f
 
-revert已一个新的commit-id来回退某条具体的commit
+revert以一个新的commit-id来回退某条具体的commit
 
 如果当前分支已经push到远端，但是由于某些原因要同时回退本地和远端仓库的某些提交，想让远端仓库和当前的分支保持一致
 
