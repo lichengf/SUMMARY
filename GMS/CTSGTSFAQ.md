@@ -34,7 +34,7 @@ Fail log：
 
 解决方案：
 
-这个问题要用最新的测试项进行测试。
+这个问题是由于**`alps/vendor/google/etc/sysconfig/google.xml`**里面的xml格式不对导致的。
 
 **GtsInstallPackagesWhitelistDeviceTestCases**
 	
