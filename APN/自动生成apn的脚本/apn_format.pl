@@ -9,6 +9,9 @@ while (<FILE>) {
 	@apn_line = split(/,/, $_);
 	my $apn_line_length = @apn_line;
 	$apn_line[5] =~ s/\//\,/g;
+	$apn_line[9]=~ s/\*//g;
+	$apn_line[10]=~ s/\*//g;
+	$apn_line[13]=~ s/\*//g;
 	$apn_line[14]=~ s/\n//g;
 	$single_line = "<apn carrier=\"$apn_line[1]\"
 	mcc=\"$apn_line[2]\"
