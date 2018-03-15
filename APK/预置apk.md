@@ -3,7 +3,9 @@
 
 ---
 
-	# 预置apk
+## MTK平台
+
+	# 预置 apk mtk平台 
 
 	`https://onlinesso.mediatek.com/Pages/FAQ.aspx?List=SW&FAQID=FAQ13232`
 
@@ -133,3 +135,19 @@
 	请注意：
 	若需要apk作为32bit的apk运行，则需要在Android.mk中定义
 	LOCAL_MULTILIB :=32
+
+## 展讯平台
+
+	第一种：/system/app
+	
+	预置在该目录下的APK，用户不能卸载
+	
+	
+	第二种：/data/app
+	
+	应用是可以卸载
+	
+	
+	第三种：/system/preloadapp
+	
+	应用用户可以卸载，但是恢复出厂设置时可以还原
