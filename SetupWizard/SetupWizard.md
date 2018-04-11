@@ -29,7 +29,17 @@
 
 priority=1，配置了优先级，也就是说它的优先级比我们原生的Launcher优先级还要高，它会在Launcher启动前就运行起来
 
-`android.intent.category.SETUP_WIZARD`表示
+`android.intent.category.SETUP_WIZARD` 这个系统代码里描述如下：
+
+    /**
+     * This is the setup wizard activity, that is the first activity that is displayed
+     * when the user sets up the device for the first time.
+     * @hide
+     */
+    @SdkConstant(SdkConstantType.INTENT_CATEGORY)
+    public static final String CATEGORY_SETUP_WIZARD = "android.intent.category.SETUP_WIZARD";
+
+表示这个Activity是一个开机向导，并且会在第一次开机是显示。
 
 `Theme.NoTitleBar.Fullscreen` 表示全屏显示, 即不会显示状态栏
 
