@@ -48,26 +48,26 @@
 	LOCAL_MODULE_SUFFIX := $(COMMON_ANDROID_PACKAGE_SUFFIX)
 	 
 	LOCAL_PREBUILT_JNI_LIBS:= \
-	@lib/armeabi/libtest.so  \
-	@lib/armeabi/libtest2.so 
+	lib/armeabi/libtest.so  \
+	lib/armeabi/libtest2.so 
 	 
 	LOCAL_CERTIFICATE := PRESIGNED
 	include $(BUILD_PREBUILT)
 	 
 	若无so，删除LOCAL_PREBUILT_JNI_LIBS
-	若有so，使用LOCAL_PREBUILT_JNI_LIBS列出所有so的路径，不要忘记使用@。@标识符会将apk中的so抽离出来build进apk同级目录下的lib文件夹中
+	若有so，使用LOCAL_PREBUILT_JNI_LIBS列出所有so的路径，在apk同级目录建立lib文件夹，放置对应的so
 	 
 	若apk支持不同cpu类型的so，针对so的部分的处理:
 	Ifeq ($(TARGET_ARCH),arm)
 	LOCAL_PREBUILT_JNI_LIBS := \
-	@lib/armeabi-v7a/xxx.so\
-	@ lib/armeabi-v7a/xxxx.so
+	lib/armeabi-v7a/xxx.so\
+	lib/armeabi-v7a/xxxx.so
 	else ifeq ($(TARGET_ARCH),x86)
 	LOCAL_PREBUILT_JNI_LIBS := \
-	@lib/x86/xxx.so
+	lib/x86/xxx.so
 	else ifeq ($(TARGET_ARCH),arm64)
 	LOCAL_PREBUILT_JNI_LIBS := \
-	@lib/armeabi-v8a/xxx.so
+	lib/armeabi-v8a/xxx.so
 	…
 	即将和TARGET_ARCH对应的so抽离出来
 	 
