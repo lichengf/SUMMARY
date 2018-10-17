@@ -36,4 +36,6 @@ revert以一个新的commit-id来回退某条具体的commit
 
 **【git 修改提交的message】**
 
-* 1 修改最后一次的log message
+* 1 如果这是你最近一次提交并且没有push到远程分支，可用以下命令直接修改：
+
+	git commit --amend -m "your new message"
