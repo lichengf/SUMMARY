@@ -41,6 +41,8 @@
 
 ## 3.hotseat
 
+### 7.0 
+
 ![launcher_welcome_page](http://o8r7cqsy6.bkt.clouddn.com/launcher_hotseat.png)
 
 * 3.1 禁止hotseat拖动
@@ -121,4 +123,64 @@ hotseat虽然不能拖动了，但是可以把wordspace里的拖动到hotseat生
 
 	需要注意的是看网上有改动createUserFolderIfNecessary这个判断container是否为-101的，亲测对于桌面抽屉的
 	图标移动没有效果，而且移动过程中还会有folder的图标生成。
+	
+
+## 4. Launcher3 长按显示删除，卸载，应用信息按钮操作
+
+![launcher_welcome_page](http://o8r7cqsy6.bkt.clouddn.com/launcher_qsb_button.png)
+
+如图所示：
+
+* 4.1 三个按钮对应的java类分别如下：
+	
+这三个按钮都继承自`packages\apps\Launcher3\src\com\android\launcher3\ButtonDropTarget.java`
+
+**Remove:** 
+
+	packages\apps\Launcher3\src\com\android\launcher3\DeleteDropTarget.java
+	
+	//这个方法是表示哪些类型支持Remove
+	public static boolean supportsDrop(Object info) {
+        return (info instanceof ShortcutInfo) 
+                || (info instanceof LauncherAppWidgetInfo)
+                || (info instanceof FolderInfo);
+    }
+
+	ShortcutInfo：代表Workspace的快捷图标
+	LauncherAppWidgetInfo: 代表Workspace中的桌面小部件
+	FolderInfo: 代表文件夹
+	
+	
+**UnInstall:**
+	
+	packages\apps\Launcher3\src\com\android\launcher3\UninstallDropTarget.java
+
+	//这个方法是表示哪些类型支持卸载
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+    public static boolean supportsDrop(Context context, Object info) {
+        if (Utilities.ATLEAST_JB_MR2) {
+            UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
+            Bundle restrictions = userManager.getUserRestrictions();
+            if (restrictions.getBoolean(UserManager.DISALLOW_APPS_CONTROL, false)
+                    || restrictions.getBoolean(UserManager.DISALLOW_UNINSTALL_APPS, false)) {
+                return false;
+            }
+        }
+
+        Pair<ComponentName, Integer> componentInfo = getAppInfoFlags(info);
+        return componentInfo != null && (componentInfo.second & AppInfo.DOWNLOADED_FLAG) != 0;
+    }
+	
+	这里的参数info其实就是上面的三种外加桌面抽屉里的图标即AppInfo.
+	
+**App Info:**
+
+	packages\apps\Launcher3\src\com\android\launcher3\InfoDropTarget.java
+
+	//这个方法表示哪些类型支持查看应用信息
+    public static boolean supportsDrop(Context context, Object info) {
+        return info instanceof AppInfo || info instanceof PendingAddItemInfo;
+    }
+	
+	PendingAddItemInfo： 看源码介绍是可移动的目标从workspace往别的container移动时用来传递componentName的中继数据。
 	

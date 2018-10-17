@@ -33,3 +33,7 @@ revert以一个新的commit-id来回退某条具体的commit
 **【git 删除本地分支】**
 
 	git branch -D local_branch
+
+**【git 修改提交的message】**
+
+* 1 修改最后一次的log message
