@@ -38,7 +38,6 @@ revert以一个新的commit-id来回退某条具体的commit
 
 * 1 如果这是你最近一次提交并且没有push到远程分支，可用以下命令直接修改：
 
-<<<<<<< HEAD
 	git commit --amend -m "your new message"
 	
 	然后执行
@@ -112,6 +111,3 @@ revert以一个新的commit-id来回退某条具体的commit
 
 		另外nano编辑器保存方式是
 		ctr+o,enter,ctr+x
-=======
-	git commit --amend -m "your new message"
->>>>>>> 86fafcf... git修改最近一次提交且没有push到远程分支
