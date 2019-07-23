@@ -8,6 +8,6 @@ cd %paths%
 ::pause
 for /f "delims=" %%i in ('dir .\ /b /s /a-d ^|findstr /i ".so"') do (
 	echo  %cd%\%%~ni.so
-	adb push %cd%\%%~ni.so /system/app
+	adb push %cd%\%%~ni.so /system/lib
 	)
 pause
